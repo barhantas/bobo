@@ -1,0 +1,27 @@
+{% extends 'user/base_visitor.html' %}
+{% block title %}Register{% endblock %}
+{% block register_active %}active{% endblock %}
+{% block body %}
+<div class="container-fluid">
+
+    <div class="row">
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+                    <form class="form-horizontal" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% include 'user/form_template.html' %}
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button href="index" type="submit" class="btn btn-success">Register</button>
+                            </div>
+
+
+                    </form>
+                </div>
+
+
+        </div>
+
+
+{% endblock %}

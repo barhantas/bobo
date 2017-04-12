@@ -1,0 +1,68 @@
+{% extends 'user/base.html' %}
+{% block title %}Profile{% endblock %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'">
+{% block body %}
+
+	  <div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="media">
+                        <div align="center">
+                            <img class="thumbnail" src="{{ user.profile_pic.url }}" width="250px" height="250px">
+                        </div>
+                        <div class="media-body" align="center">
+
+						    <a class="btn btn-social-icon btn-twitter" onclick="window.open('http://{{ user.facebooklink }}');">
+                             <span class="fa fa-facebook" style="font-size:24px"></span> </a>
+
+                            <a class="btn btn-social-icon btn-twitter" onclick="window.open('http://{{ user.twitterlink }}');">
+                             <span class="fa fa-twitter" style="font-size:24px"></span></a>
+
+						    <a class="btn btn-social-icon btn-twitter" onclick="window.open('http://{{ user.instagramlink }}');">
+                             <span class="fa fa-instagram" style="font-size:24px"></span> </a>
+
+
+
+                            <hr>
+                            <h4><strong>Info  </strong><span class="glyphicon glyphicon-tags" aria-hidden="true"/></h4>
+                            <p>{{ user.info }}</p>
+                            <hr>
+                            <h4><strong>Adress  </strong><span class="glyphicon glyphicon-pushpin" aria-hidden="true"/></h4>
+                            <p>{{ user.adress }}</p>
+                            <hr>
+                            <h4><strong>Contact  </strong><span class="glyphicon glyphicon-phone-alt" aria-hidden="true"/></h4>
+                            <p>{{ user.tel_num }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+	<div class="col-lg-9 col-md-9 hidden-sm hidden-xs" align="center">
+        <div class="well well-lg"  style="background-color:#FFFFFF">
+            <h1>{{ user.company_name }}: {{ user.message }}</h1>
+	<div class="panel panel-default">
+			<form accept-charset="UTF-8" action="" method="POST"  enctype="multipart/form-data" >
+                {% csrf_token %}
+                <textarea class="form-control" style="resize:none" id="id_message" maxlength="200" name="message" type="text"
+                placeholder="Type in your message" rows="3"></textarea>
+
+			<button class="btn btn-info" style="height:30px;width:1040px" type="submit">Send</button>
+            </form>
+		</div>
+	</div>
+
+	<div class="row">
+        <div class="col-lg-4" align="center">
+          <img class="img-circle" src="pic/menu.jpg" alt="Check Menu" width="210" height="210">
+         </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4" align="center">
+          <img class="img-circle" src="pic/gallery.jpg" alt="Check Gallery" width="210" height="210">
+        </div><!-- /.col-lg-4 -->
+    </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+  {% endblock %}

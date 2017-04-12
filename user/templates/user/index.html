@@ -1,0 +1,203 @@
+{% extends 'user/base.html' %}
+{% block user_active %}active{% endblock %}
+
+{% block body %}
+         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<style type="text/css">
+
+#map-canvas {
+	width: 1200px;
+	height: 400px;
+}
+
+</style>
+
+ <body>
+ <div id="map-canvas"></div>
+  <div id="map" style="height: 400px; width: 1400px;">
+
+</div>
+<script type="text/javascript">
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 17,
+      center: new google.maps.LatLng({{ user.geo_loc }}),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+</script>
+
+ </body>
+    <div class="col-sm-10">{{ form }} </div>
+    <div class="col-sm-10">{{ formtester }} </div>
+    <div class="col-sm-10">{{ message }}</div>
+    <div class="col-sm-10">{{ formtest }}</div>
+
+{% for geo_loc,message,profile_pic in formtest %}
+    {{ geo_loc }}: {{ message }}
+    <script>
+
+
+    var iconx = {
+    url: 'media/{{profile_pic}}', // url
+    scaledSize: new google.maps.Size(35, 35), // scaled size
+    //origin: new google.maps.Point(0,0), // origin
+    //anchor: new google.maps.Point(0, 0) // anchor
+};
+
+
+        marker = new google.maps.Marker({
+        position: new google.maps.LatLng({{ geo_loc }}),
+        icon: iconx,
+        map: map})
+
+    content = '{{ message }}';
+
+        var infowindow = new google.maps.InfoWindow({
+            content: content,
+            maxWidth: 350
+  });
+        infowindow.open(map, marker);
+
+
+
+    </script>
+
+{% endfor %}
+
+<script type="text/javascript">
+
+function initialize() {
+
+
+
+function CustomMarker(latlng, map, args) {
+	this.latlng = latlng;
+	this.args = args;
+	this.setMap(map);
+}
+
+{% for geo_loc,message,profile_pic in formtest %}
+CustomMarker.prototype = new google.maps.OverlayView();
+
+CustomMarker.prototype.draw = function() {
+
+	var self = this;
+
+	var div = this.div;
+	var divx = this.divx;
+
+
+	if (!div) {
+
+   		divx = this.divx = document.createElement('divx');
+		div = this.div = document.createElement('div');
+        
+		divx.className = 'marker';
+		divx.style.borderWidth = '2px'
+		divx.style.borderRadius = '3em'
+		divx.style.borderStyle = 'solid';
+		divx.style.borderColor = '#b30000';
+		divx.style.position = 'absolute';
+		divx.style.cursor = 'pointer';
+		divx.style.width = '20px';
+		divx.style.height = '20px';
+
+		var imgx = document.createElement('img');
+		imgx.src = 'media/notify.png';
+		imgx.style.borderRadius = '3em'
+		imgx.style.width = '100%';
+		imgx.style.height = '100%';
+		imgx.style.position = 'absolute';
+		divx.appendChild(imgx);
+
+
+
+		div.className = 'marker';
+		div.style.borderWidth = '2px'
+		div.style.borderRadius = '3em'
+		div.style.borderStyle = 'solid';
+		div.style.borderColor = '#ff8000';
+		div.style.position = 'absolute';
+		div.style.cursor = 'pointer';
+		div.style.width = '50px';
+		div.style.height = '50px';
+
+		  // Create the img element and attach it to the div.
+		var img = document.createElement('img');
+		img.src = 'media/{{ profile_pic }}';
+		img.style.borderRadius = '3em'
+		img.style.width = '100%';
+		img.style.height = '100%';
+		img.style.position = 'absolute';
+		div.appendChild(img);
+
+
+
+		if (typeof(self.args.marker_id) !== 'undefined') {
+			div.dataset.marker_id = self.args.marker_id;
+		}
+
+
+		google.maps.event.addDomListener(div, "click", function(event) {
+			alert('{{ message }}');
+			google.maps.event.trigger(self, "click");
+		});
+		google.maps.event.addDomListener(divx, "click", function(event) {
+			alert('{{ message }}');
+			google.maps.event.trigger(self, "click");
+		});
+
+		var panes = this.getPanes();
+		panes.overlayImage.appendChild(div);
+		panes.overlayImage.appendChild(divx);
+	}
+
+	var point = this.getProjection().fromLatLngToDivPixel(this.latlng);
+
+	if (point) {
+		div.style.left = (point.x - 10) + 'px';
+		div.style.top = (point.y - 20) + 'px';
+		divx.style.left = (point.x + 30) + 'px';
+		divx.style.top = (point.y - 30) + 'px';
+	}
+};
+
+CustomMarker.prototype.remove = function() {
+	if (this.div) {
+		this.div.parentNode.removeChild(this.div);
+		this.div = null;
+	}
+};
+
+CustomMarker.prototype.getPosition = function() {
+	return this.latlng;
+};
+
+
+	var myLatlng = new google.maps.LatLng({{ geo_loc }});
+	var mapOptions = {
+		zoom: 14,
+		center: new google.maps.LatLng({{ user.geo_loc }}),
+		disableDefaultUI: true
+	}
+
+	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+	overlay = new CustomMarker(
+		myLatlng,
+		map,
+		{
+		    //marker_id: '{{ geo_loc }}'
+		}
+	);
+
+{% endfor %}
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+{% endblock %}
